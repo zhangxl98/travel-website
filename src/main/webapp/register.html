@@ -90,11 +90,11 @@
 						</td>
 						<td class="td_right check">
 							<input type="text" id="check" name="check" class="check">
-							<img src="/checkCode.do" height="32px" alt="" onclick="changeCheckCode(this)">
+							<img src="/user.do?op=checkCode" height="32px" alt="" onclick="changeCheckCode(this)">
 							<script type="text/javascript">
 								//图片点击事件
 								function changeCheckCode(img) {
-									img.src = "checkCodeServlet?" + new Date().getTime();
+									img.src = "/user.do?op=checkCode?" + new Date().getTime();
 								}
 							</script>
 						</td>
@@ -172,7 +172,7 @@
 				email: {
 					required: true,
 					email: true,
-					remote: "/checkEmail.do"
+					remote: "/user.do?op=checkEmail"
 				},
 				telephone: {
 					required: true,
@@ -211,7 +211,7 @@
 				* "action=register&username=1111&password=1234567&email=1111%40qq.com"
 				* */
 				var formData = $(form).serialize();
-				$.post("/register.do", formData, function (result) {
+				$.post("/user.do?op=register", formData, function (result) {
 					//解析响应数据
 					console.log(result);
 					var registerFlag = result.registerFlag;
