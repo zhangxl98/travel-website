@@ -1,0 +1,11 @@
+<c3p0-config>
+<!-- 使用默认的配置读取连接池对象 -->
+<default-config>
+  <!--  1. 数据库的连接参数 -->
+  <property name="driverClass">com.mysql.jdbc.Driver</property>
+  <!-- MySQL 运行于 Docker 容器中，映射端口为 3333 -->
+  <property name="jdbcUrl">jdbc:mysql://127.0.0.1:3333/travel_website?useUnicode=true&amp;characterEncoding=UTF8</property>
+  <property name="user">root</property>
+  <property name="password">123456</property>
+</default-config>
+</c3p0-config>
