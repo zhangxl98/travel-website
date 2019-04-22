@@ -31,8 +31,6 @@ public class CheckEmailServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 处理中文乱码
-        req.setCharacterEncoding("UTF-8");
 
         // 接收请求数据
         String email = req.getParameter("email");
