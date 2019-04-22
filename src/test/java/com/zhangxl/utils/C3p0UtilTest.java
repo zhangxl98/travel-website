@@ -1,4 +1,4 @@
-package test.com.zhangxl.utils;
+package com.zhangxl.utils;
 
 import com.zhangxl.utils.C3p0Util;
 import org.junit.Test;
