@@ -77,4 +77,20 @@ public class UserDaoImpl implements UserDao {
                 user.getStatus(),
                 user.getCode());
     }
+
+    /**
+     * 根据　code 更新　status=1
+     *
+     * @param code
+     * @return
+     */
+    @Override
+    public int updateStatusByCode(String code) {
+
+        String sql = "UPDATE tab_user " +
+                "SET status=1 " +
+                "WHERE code = ? " +
+                "  AND status = 0";
+        return jdbcTemplate.update(sql, code);
+    }
 }

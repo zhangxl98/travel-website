@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.zhangxl.model.User;
 import com.zhangxl.service.UserService;
 import com.zhangxl.service.impl.UserServiceImpl;
+import com.zhangxl.utils.MailUtil;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.imageio.ImageIO;
@@ -29,16 +30,17 @@ import java.util.Random;
  * @Description 接收 user 相关的请求
  */
 @WebServlet("/user.do")
-public class UserServlet extends BaseServlet{
+public class UserServlet extends BaseServlet {
 
     private UserService userService = new UserServiceImpl();
 
     /**
      * 接收 email 唯一性校验请求
+     *
      * @param req
      * @param resp
      */
-    public void checkEmail(HttpServletRequest req, HttpServletResponse resp){
+    public void checkEmail(HttpServletRequest req, HttpServletResponse resp) {
         // 接收请求数据
         String email = req.getParameter("email");
 
@@ -57,10 +59,11 @@ public class UserServlet extends BaseServlet{
 
     /**
      * 接收注册请求
+     *
      * @param req
      * @param resp
      */
-    public void register(HttpServletRequest req, HttpServletResponse resp){
+    public void register(HttpServletRequest req, HttpServletResponse resp) {
         // 接收请求数据
         Map<String, String[]> parameterMap = req.getParameterMap();
 
@@ -77,8 +80,8 @@ public class UserServlet extends BaseServlet{
         //验证码校验
         if (!serverCode.equalsIgnoreCase(String.valueOf(userCode[0]))) {
             //校验不通过：1、看到登录页面；2、页面上需要嵌入错误信息；
-            result.put("msg","验证码错误");
-        }else {
+            result.put("msg", "验证码错误");
+        } else {
 
             // 使用 BeanUtils 工具类，把 Map 中的数据封装到实体类中
             User user = new User();
@@ -89,6 +92,19 @@ public class UserServlet extends BaseServlet{
                 // 处理数据：把 user 插入到数据库中
 
                 boolean registerFlag = userService.addUser(user);
+
+
+                // 注册成功，给用户发送激活邮件
+                if (registerFlag) {
+                    // 发送邮件
+                    MailUtil.sendEmail(user.getEmail(),
+                            "<h1>恭喜您，注册成功！</h1>" +
+                                    "<a href='http://localhost:8080/user.do?op=active&code=" +
+                                    user.getCode() +
+                                    "'>请点击此链接，进行激活</a>");
+                }
+
+                System.out.println("active URL ===> http://localhost:8080/userServlet?op=active&code=" + user.getCode());
 
                 result.put("registerFlag", registerFlag);
 
@@ -110,11 +126,48 @@ public class UserServlet extends BaseServlet{
     }
 
     /**
-     * 生成验证码
+     * 接收用户激活请求
+     *
      * @param req
      * @param resp
      */
-    public void checkCode(HttpServletRequest req, HttpServletResponse resp){
+    public void active(HttpServletRequest req, HttpServletResponse resp) {
+        // 接收请求数据
+        String code = req.getParameter("code");
+
+        // 处理数据
+
+        // 如果 activeFlag == true -> 激活成功
+        boolean activeFlag = userService.active(code);
+
+        // 响应数据
+        if (activeFlag) {
+            // 成功 -> 跳转到登录页面
+            try {
+                resp.getWriter().println("激活成功，3秒钟之后跳转到登录页面！");
+                resp.setHeader("refresh", "3;/login.html");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // 失败 -> 跳转到注册页面
+            try {
+                resp.getWriter().println("激活失败，请联系管理员，3秒钟之后跳转到注册页面！");
+                resp.setHeader("refresh", "3;/register.html");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * 生成验证码
+     *
+     * @param req
+     * @param resp
+     */
+    public void checkCode(HttpServletRequest req, HttpServletResponse resp) {
         // gui 生成图片
         // 1 高和宽
         int height = 30;
@@ -148,7 +201,7 @@ public class UserServlet extends BaseServlet{
             sb.append(str);//  获取验证码数据
         }
         //  验证码保存到session中
-        req.getSession().setAttribute("code",sb.toString());
+        req.getSession().setAttribute("code", sb.toString());
         // 6 干扰线
         for (int i = 0; i < 3; i++) {
             // 设置颜色--随机数

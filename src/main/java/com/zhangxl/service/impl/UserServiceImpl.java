@@ -62,4 +62,17 @@ public class UserServiceImpl implements UserService {
         // 保存用户
         return userDao.save(user) != 0;
     }
+
+    /**
+     * 更新该用户的激活状态 <br>
+     * 激活成功 -> <code>return true</code>
+     *
+     * @param code
+     * @return
+     */
+    @Override
+    public boolean active(String code) {
+
+        return userDao.updateStatusByCode(code) != 0;
+    }
 }

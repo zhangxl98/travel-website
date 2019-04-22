@@ -34,4 +34,13 @@ public interface UserService {
      * @return
      */
     boolean addUser(User user) throws NoSuchAlgorithmException;
+
+    /**
+     * 更新该用户的激活状态 <br>
+     * 激活成功 -> <code>return true</code>
+     *
+     * @param code
+     * @return
+     */
+    boolean active(String code);
 }

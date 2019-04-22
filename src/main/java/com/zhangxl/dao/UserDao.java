@@ -31,4 +31,12 @@ public interface UserDao {
      * @return
      */
     int save(User user);
+
+    /**
+     * 根据　code 更新　user status
+     *
+     * @param code
+     * @return
+     */
+    int updateStatusByCode(String code);
 }
