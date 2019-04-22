@@ -17,8 +17,18 @@ public interface UserDao {
 
     /**
      * 通过 email 查询 user
+     *
      * @param email
      * @return
      */
     User queryByEmail(String email);
+
+    /**
+     * 保存 user 到数据库 <br>
+     * 返回数据库影响条数
+     *
+     * @param user
+     * @return
+     */
+    int save(User user);
 }

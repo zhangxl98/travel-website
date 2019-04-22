@@ -27,6 +27,7 @@ public class UserDaoImpl implements UserDao {
 
     /**
      * 通过 email 查询 user
+     *
      * @param email
      * @return
      */
@@ -51,5 +52,29 @@ public class UserDaoImpl implements UserDao {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * 保存 user 到数据库 <br>
+     * 返回数据库影响条数
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public int save(User user) {
+
+        String sql = "INSERT INTO tab_user (username, password, name, birthday, sex, telephone, email, status, code) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        return jdbcTemplate.update(sql,
+                user.getUsername(),
+                user.getPassword(),
+                user.getName(),
+                user.getBirthday(),
+                user.getSex(),
+                user.getTelephone(),
+                user.getEmail(),
+                user.getStatus(),
+                user.getCode());
     }
 }

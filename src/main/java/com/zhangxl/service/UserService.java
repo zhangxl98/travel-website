@@ -1,5 +1,7 @@
 package com.zhangxl.service;
 
+import com.zhangxl.model.User;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -21,4 +23,13 @@ public interface UserService {
      * @return
      */
     boolean checkEmail(String email);
+
+    /**
+     * 添加 user <br>
+     * 添加成功 -> <code>return true</code>
+     *
+     * @param user
+     * @return
+     */
+    boolean addUser(User user);
 }

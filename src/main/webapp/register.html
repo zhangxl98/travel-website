@@ -199,6 +199,31 @@
 					// 手机号合法性校验
 					phoneFmt: "手机号不合法"
 				}
+			},
+			submitHandler: function (form) {
+				//提交表单：使用ajax提交
+				/*
+				* param提交数据：
+				*       方式一：字符串   "name=张三&age=13"
+				*       方式二：对象   {name：zhagnsan,age:13}
+				* */
+				/*
+				* "action=register&username=1111&password=1234567&email=1111%40qq.com"
+				* */
+				var formData = $(form).serialize();
+				$.post("/register.do", formData, function (result) {
+					//解析响应数据
+					console.log(result);
+					var registFlag = result.registFlag;
+					if (registFlag) {
+						//注册成功 --跳转到 register_ok.html
+						location.href = "/register_ok.html";
+					} else {
+						//注册失败：在register页面给出错误提示信息
+						var msg = result.msg;
+						$("#msg").html(msg);
+					}
+				}, "json");
 			}
 		})
 	})

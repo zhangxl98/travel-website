@@ -2,6 +2,7 @@ package com.zhangxl.service.impl;
 
 import com.zhangxl.dao.UserDao;
 import com.zhangxl.dao.impl.UserDaoImpl;
+import com.zhangxl.model.User;
 import com.zhangxl.service.UserService;
 
 /**
@@ -33,5 +34,18 @@ public class UserServiceImpl implements UserService {
     public boolean checkEmail(String email) {
 
         return userDao.queryByEmail(email) == null;
+    }
+
+    /**
+     * 添加 user <br>
+     * 添加成功 -> <code>return true</code>
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public boolean addUser(User user) {
+
+        return userDao.save(user) != 0;
     }
 }
