@@ -27,7 +27,7 @@ import java.util.Map;
  * @Version V1.0.0
  * @Description 处理注册请求
  */
-@WebServlet("register.do")
+@WebServlet("/register.do")
 public class RegisterServlet extends HttpServlet {
 
     @Override

@@ -214,8 +214,8 @@
 				$.post("/register.do", formData, function (result) {
 					//解析响应数据
 					console.log(result);
-					var registFlag = result.registFlag;
-					if (registFlag) {
+					var registerFlag = result.registerFlag;
+					if (registerFlag) {
 						//注册成功 --跳转到 register_ok.html
 						location.href = "/register_ok.html";
 					} else {

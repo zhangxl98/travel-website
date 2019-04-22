@@ -4,6 +4,10 @@ import com.zhangxl.dao.UserDao;
 import com.zhangxl.dao.impl.UserDaoImpl;
 import com.zhangxl.model.User;
 import com.zhangxl.service.UserService;
+import com.zhangxl.utils.Md5Util;
+import com.zhangxl.utils.UuidUtil;
+
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -44,8 +48,18 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public boolean addUser(User user) {
+    public boolean addUser(User user) throws NoSuchAlgorithmException {
 
+        // 设置用户的激活状态    0 -> 未激活
+        user.setStatus(0);
+
+        // 设置用户的激活码
+        user.setCode(UuidUtil.getUuid());
+
+        // 对用户密码进行加密处理
+        user.setPassword(Md5Util.encodeByMd5(user.getPassword()));
+
+        // 保存用户
         return userDao.save(user) != 0;
     }
 }

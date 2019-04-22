@@ -2,6 +2,8 @@ package com.zhangxl.service;
 
 import com.zhangxl.model.User;
 
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -31,5 +33,5 @@ public interface UserService {
      * @param user
      * @return
      */
-    boolean addUser(User user);
+    boolean addUser(User user) throws NoSuchAlgorithmException;
 }
