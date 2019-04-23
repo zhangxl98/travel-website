@@ -85,7 +85,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(User user) throws NoSuchAlgorithmException {
 
-        // 通过数据库查询，找出该 email 和加密后的 password 对应的用户信息
-        return userDao.queryByEmailAndPassword(user.getEmail(), Md5Util.encodeByMd5(user.getPassword()));
+        // 通过用户输入的 email 从数据库中查询对应的 user
+        User realUser = userDao.queryByEmail(user.getEmail());
+        // 对用户输入的 password 进行校验
+        if (realUser != null && null != user.getPassword()) {
+            // 可以从数据库查到数据，并且用户输入的 password 不为空 --> 解决空指针问题
+            if (realUser.getPassword().equals(Md5Util.encodeByMd5(user.getPassword()))) {
+                // 数据库中的 password 与用户输入的 password 一致
+                return realUser;
+            }
+        }
+
+        // 没有从数据库中查找到对应的 user 或 password 校验不通过
+        return null;
     }
 }

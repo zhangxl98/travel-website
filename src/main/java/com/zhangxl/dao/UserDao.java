@@ -39,13 +39,4 @@ public interface UserDao {
      * @return
      */
     int updateStatusByCode(String code);
-
-    /**
-     * 根据 email 和 password 查询对应的 user
-     *
-     * @param email
-     * @param password
-     * @return
-     */
-    User queryByEmailAndPassword(String email, String password);
 }
