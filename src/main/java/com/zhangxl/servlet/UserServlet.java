@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -73,12 +75,12 @@ public class UserServlet extends BaseServlet {
         // 处理验证码校验
 
         // 获取用户输入的验证码
-        String[] userCode = parameterMap.get("check");
+        String[] userCheckCode = parameterMap.get("check");
         //获取服务器生成的验证码
-        String serverCode = (String) req.getSession().getAttribute("code");
+        String serverCheckCode = (String) req.getSession().getAttribute("code");
 
         //验证码校验
-        if (!serverCode.equalsIgnoreCase(String.valueOf(userCode[0]))) {
+        if (!serverCheckCode.equalsIgnoreCase(String.valueOf(userCheckCode[0]))) {
             //校验不通过：1、看到登录页面；2、页面上需要嵌入错误信息；
             result.put("msg", "验证码错误");
         } else {
@@ -90,7 +92,6 @@ public class UserServlet extends BaseServlet {
                 BeanUtils.populate(user, parameterMap);
 
                 // 处理数据：把 user 插入到数据库中
-
                 boolean registerFlag = userService.addUser(user);
 
 
@@ -104,6 +105,7 @@ public class UserServlet extends BaseServlet {
                                     "'>请点击此链接，进行激活</a>");
                 }
 
+                // 在控制台打印出激活地址
                 System.out.println("active URL ===> http://localhost:8080/userServlet?op=active&code=" + user.getCode());
 
                 result.put("registerFlag", registerFlag);
@@ -159,6 +161,80 @@ public class UserServlet extends BaseServlet {
             }
         }
 
+    }
+
+    /**
+     * 接收用户登录请求
+     *
+     * @param req
+     * @param resp
+     */
+    public void login(HttpServletRequest req, HttpServletResponse resp) {
+        // 接收请求数据
+        Map<String, String[]> parameterMap = req.getParameterMap();
+
+        // 处理数据
+
+        // 封装数据的结果集
+        Map<String, Object> result = new HashMap<>();
+
+        // 验证码校验
+
+        // 获取用户输入的验证码
+        String[] userCheckCode = parameterMap.get("check");
+        // 获取服务器产生的验证码
+        String serverCheckCode = (String) req.getSession().getAttribute("code");
+
+        // 进行对比
+        if (!serverCheckCode.equalsIgnoreCase(String.valueOf(userCheckCode[0]))) {
+            // 验证码校验不通过，给出提示信息
+            result.put("loginFlag", false);
+            result.put("msg", "验证码错误");
+
+        } else {
+            // 验证码校验通过
+            // 用来封装的对象
+            User user = new User();
+
+            try {
+                // 使用 BeanUtils 封装
+                BeanUtils.populate(user, parameterMap);
+
+                User realUser = userService.login(user);
+
+                if (realUser == null) {
+                    // 用户名或密码错误，登录失败
+
+                    result.put("loginFlag", false);
+                    result.put("msg", "用户名或密码错误");
+                } else {
+
+                    // 用户信息校验通过
+
+                    if (realUser.getStatus() == 0) {
+                        // 该用户未激活
+                        result.put("loginFlag", false);
+                        result.put("msg", "账号未激活，请查看激活邮件");
+                    } else {
+                        // 登录成功 -> 存储用户到 Session 中
+                        req.getSession().setAttribute("loginUser", realUser);
+                        result.put("loginFlag", true);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                result.put("loginFlag", false);
+                result.put("msg", "数据异常，请联系管理员");
+            }
+        }
+
+        // 响应数据 JSON
+        String str = JSON.toJSONString(result);
+        try {
+            resp.getWriter().println(str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

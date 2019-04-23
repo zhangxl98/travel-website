@@ -43,4 +43,12 @@ public interface UserService {
      * @return
      */
     boolean active(String code);
+
+    /**
+     * 处理用户登录业务
+     *
+     * @param user
+     * @return
+     */
+    User login(User user) throws NoSuchAlgorithmException;
 }

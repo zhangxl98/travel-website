@@ -93,4 +93,34 @@ public class UserDaoImpl implements UserDao {
                 "  AND status = 0";
         return jdbcTemplate.update(sql, code);
     }
+
+    /**
+     * 根据 email 和 password 查询对应的 user
+     *
+     * @param email
+     * @param password
+     * @return
+     */
+    @Override
+    public User queryByEmailAndPassword(String email, String password) {
+        String sql = "SELECT uid, " +
+                "       username, " +
+                "       password, " +
+                "       name, " +
+                "       birthday, " +
+                "       sex, " +
+                "       telephone, " +
+                "       email, " +
+                "       status, " +
+                "       code " +
+                "FROM tab_user " +
+                "WHERE email = ? " +
+                "  AND password = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), email, password);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

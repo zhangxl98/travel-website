@@ -75,4 +75,17 @@ public class UserServiceImpl implements UserService {
 
         return userDao.updateStatusByCode(code) != 0;
     }
+
+    /**
+     * 调用 dao 层查询用户信息，判断用户合法性
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public User login(User user) throws NoSuchAlgorithmException {
+
+        // 通过数据库查询，找出该 email 和加密后的 password 对应的用户信息
+        return userDao.queryByEmailAndPassword(user.getEmail(), Md5Util.encodeByMd5(user.getPassword()));
+    }
 }
