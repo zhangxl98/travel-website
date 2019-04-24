@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -34,6 +32,7 @@ import java.util.Random;
 @WebServlet("/user.do")
 public class UserServlet extends BaseServlet {
 
+    // 初始化 service
     private UserService userService = new UserServiceImpl();
 
     /**
