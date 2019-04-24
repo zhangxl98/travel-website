@@ -363,5 +363,17 @@
 <!-- 旅游 end-->
 <!--导入底部-->
 <div id="footer"></div>
+
+<script>
+
+	// 页面加载完成后，加载黑马精选数据  ---  人气旅游、最新旅游、主题旅游
+	$(function () {
+		// 发送请求
+		$.get("/route.do?op=routeCareChoose", function (result) {
+			console.log(result);
+		}, "json");
+	})
+
+</script>
 </body>
 </html>
