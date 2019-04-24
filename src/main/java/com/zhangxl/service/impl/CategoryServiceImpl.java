@@ -1,9 +1,12 @@
 package com.zhangxl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.zhangxl.dao.CategoryDaao;
 import com.zhangxl.dao.impl.CategoryDaoImpl;
 import com.zhangxl.model.Category;
 import com.zhangxl.service.CategoryService;
+import com.zhangxl.utils.JedisUtil;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -33,8 +36,28 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     @Override
-    public List<Category> queryAllCategory() {
+    public String queryAllCategory() {
 
-        return categoryDaao.queryAll();
+        // 添加缓存业务
+
+        // 优先从缓存中查： redis
+        Jedis jedis = JedisUtil.getJedis();
+        String categoryJson = jedis.get("TRAVEL_WEBSITE_CATEGORY_LIST");
+
+        if (null == categoryJson) {
+            // 缓存中没有查到数据，调用 Dao 从数据库中查询
+            List<Category> categoryList = categoryDaao.queryAll();
+
+            // 把数据库中查出的数据转成 JSON
+            categoryJson = JSON.toJSONString(categoryList);
+            // 存储到 Redis 缓存中
+            jedis.set("TRAVEL_WEBSITE_CATEGORY_LIST", categoryJson);
+        }
+
+        // 释放资源
+        JedisUtil.close(jedis);
+
+        // 返回数据
+        return categoryJson;
     }
 }

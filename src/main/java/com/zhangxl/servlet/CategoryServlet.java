@@ -41,11 +41,11 @@ public class CategoryServlet extends BaseServlet {
     private void queryAll(HttpServletRequest req, HttpServletResponse resp) {
 
         // 处理数据：调用 Service 查询
-        List<Category> categoryList = categoryService.queryAllCategory();
+        String categoryList = categoryService.queryAllCategory();
 
         // 响应数据
         try {
-            resp.getWriter().println(JSON.toJSONString(categoryList));
+            resp.getWriter().println(categoryList);
         } catch (IOException e) {
             e.printStackTrace();
         }

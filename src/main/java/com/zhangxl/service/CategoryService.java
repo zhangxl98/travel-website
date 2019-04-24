@@ -24,5 +24,5 @@ public interface CategoryService {
      *
      * @return
      */
-    List<Category> queryAllCategory();
+    String queryAllCategory();
 }
