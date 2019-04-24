@@ -238,10 +238,36 @@ public class UserServlet extends BaseServlet {
     }
 
     /**
+     * 接收用户注销登录的请求
+     * <pre>createTime:
+     * 4/24/19 9:40 AM</pre>
+     *
+     * @param req
+     * @param resp
+     */
+    private void logOut(HttpServletRequest req, HttpServletResponse resp) {
+
+        // 收到请求后，直接销毁该用户的 Session
+        User loginUser = (User) req.getSession().getAttribute("loginUser");
+
+        if (null != loginUser) {
+            // 如果是登录状态（loginUser 不为空），销毁
+            req.getSession().invalidate();
+        }
+
+        // 响应数据，重定向到登录页面
+        try {
+            resp.sendRedirect("/login.html");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
      * 接收获取登录用户信息的请求
      * <pre>createTime:
-     * 4/23/19 10:49 PM
-     * </pre>
+     * 4/23/19 10:49 PM</pre>
      *
      * @param req
      * @param resp
@@ -261,7 +287,7 @@ public class UserServlet extends BaseServlet {
         } else {
             // 用户未登录
             result.put("loginFlag", false);
-            result.put("msg","用户未登录");
+            result.put("msg", "用户未登录");
         }
 
         // 3.响应数据 ==> JSON

@@ -15,7 +15,6 @@ $(function () {
 			console.log('用户已登录')
 			var username = result.loginUserName
 			$("#usernameSpan").html("欢迎回来：" + username)
-			console.log('显示用户名')
 			//隐藏未登录状态
 			$(".login_out").hide()
 
