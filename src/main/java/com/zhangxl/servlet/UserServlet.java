@@ -42,7 +42,7 @@ public class UserServlet extends BaseServlet {
      * @param req
      * @param resp
      */
-    public void checkEmail(HttpServletRequest req, HttpServletResponse resp) {
+    private void checkEmail(HttpServletRequest req, HttpServletResponse resp) {
         // 接收请求数据
         String email = req.getParameter("email");
 
@@ -65,7 +65,7 @@ public class UserServlet extends BaseServlet {
      * @param req
      * @param resp
      */
-    public void register(HttpServletRequest req, HttpServletResponse resp) {
+    private void register(HttpServletRequest req, HttpServletResponse resp) {
         // 接收请求数据
         Map<String, String[]> parameterMap = req.getParameterMap();
 
@@ -133,7 +133,7 @@ public class UserServlet extends BaseServlet {
      * @param req
      * @param resp
      */
-    public void active(HttpServletRequest req, HttpServletResponse resp) {
+    private void active(HttpServletRequest req, HttpServletResponse resp) {
         // 接收请求数据
         String code = req.getParameter("code");
 
@@ -169,7 +169,7 @@ public class UserServlet extends BaseServlet {
      * @param req
      * @param resp
      */
-    public void login(HttpServletRequest req, HttpServletResponse resp) {
+    private void login(HttpServletRequest req, HttpServletResponse resp) {
         // 接收请求数据
         Map<String, String[]> parameterMap = req.getParameterMap();
 
@@ -238,12 +238,48 @@ public class UserServlet extends BaseServlet {
     }
 
     /**
+     * 接收获取登录用户信息的请求
+     * <pre>createTime:
+     * 4/23/19 10:49 PM
+     * </pre>
+     *
+     * @param req
+     * @param resp
+     */
+    private void getLoginUser(HttpServletRequest req, HttpServletResponse resp) {
+
+        // 1.从域中取得数据
+        User loginUser = (User) req.getSession().getAttribute("loginUser");
+
+        // 2.处理数据
+        // 封装的结果集
+        Map<String, Object> result = new HashMap<>();
+        if (null != loginUser) {
+            // 用户已登录
+            result.put("loginFlag", true);
+            result.put("loginUserName", loginUser.getName());
+        } else {
+            // 用户未登录
+            result.put("loginFlag", false);
+            result.put("msg","用户未登录");
+        }
+
+        // 3.响应数据 ==> JSON
+        try {
+            resp.getWriter().println(JSON.toJSONString(result));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
      * 生成验证码
      *
      * @param req
      * @param resp
      */
-    public void checkCode(HttpServletRequest req, HttpServletResponse resp) {
+    private void checkCode(HttpServletRequest req, HttpServletResponse resp) {
         // gui 生成图片
         // 1 高和宽
         int height = 30;

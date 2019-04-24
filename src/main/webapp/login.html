@@ -72,7 +72,7 @@
 		var formData = $("#loginForm").serialize();
 		$.post("/user.do?op=login", formData, function (result) {
 			//处理响应数据
-			console.log(result);
+			console.log("login.html:" + result);
 			if (result.loginFlag) {
 				//登录成功： 跳转到首页
 				location.href = "/index.html";
