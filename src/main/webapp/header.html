@@ -111,11 +111,23 @@
 	// 获取搜索框中的内容
 	function searchByRname() {
 		var rname = $("#rname").val()
-		var cid = getParameter("cid");
+		var cid = getParameter("cid")
 		// 页面跳转
 		if (cid && rname)
 			location.href = "/route_list.html?cid=" + cid + "&rname=" + rname
 		else if (rname)
 			location.href = "/route_list.html?rname=" + rname
 	}
+
+	// 搜索跳转后回显搜索框中的内容
+	$(function () {
+		var rname = getParameter("rname")
+
+		// 如果有值
+		if (rname) {
+			rname = decodeURI(rname)
+			$("#rname").val(rname)
+		}
+
+	})
 </script>
