@@ -42,16 +42,7 @@
 <!-- 首页导航 -->
 <div class="navitem">
 	<ul class="nav" id="categoryList">
-<!--		<li class="nav-active"><a href="index.html">首页</a></li>-->
-<!--		<li><a href="route_list.html">门票</a></li>-->
-<!--		<li><a href="route_list.html">酒店</a></li>-->
-<!--		<li><a href="route_list.html">香港车票</a></li>-->
-<!--		<li><a href="route_list.html">出境游</a></li>-->
-<!--		<li><a href="route_list.html">国内游</a></li>-->
-<!--		<li><a href="route_list.html">港澳游</a></li>-->
-<!--		<li><a href="route_list.html">抱团定制</a></li>-->
-<!--		<li><a href="route_list.html">全球自由行</a></li>-->
-<!--		<li><a href="favoriterank.html">收藏排行榜</a></li>-->
+		// 动态生成导航条
 	</ul>
 </div>
 
@@ -109,7 +100,7 @@
 
 			//jq遍历
 			$(result).each(function (index, element) {
-				categoryHtml += '<li><a href="route_list.html">' + element.cname + '</a></li>';
+				categoryHtml += '<li><a href="route_list.html?cid=' + element.cid + '">' + element.cname + '</a></li>';
 			});
 			categoryHtml += '<li><a href="favoriterank.html">收藏排行榜</a></li>';
 
@@ -119,4 +110,3 @@
 
 	});
 </script>
-    

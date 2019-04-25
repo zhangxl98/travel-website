@@ -64,10 +64,11 @@ public class RouteServiceImpl implements RouteService {
      *
      * @param strpageNum
      * @param strpageSize
+     * @param cid
      * @return
      */
     @Override
-    public String pageQuery(String strpageNum, String strpageSize) {
+    public String pageQuery(String strpageNum, String strpageSize, String cid) {
 
         // 初始化 pageNum、pageSize
         int pageNum = 1;
@@ -105,10 +106,10 @@ public class RouteServiceImpl implements RouteService {
         int startCount = (pageNum - 1) * pageSize;
 
         // 调用 Dao 层，获取分页数据
-        List<Route> routeList = routeDao.pageQuery(startCount, pageSize);
+        List<Route> routeList = routeDao.pageQuery(startCount, pageSize, cid);
 
         // 调用 Dao 层，获取 Route （旅游线路）的总条数
-        int totalCount = routeDao.queryTotalCount();
+        int totalCount = routeDao.queryTotalCount(cid);
 
         /*
           计算出总共需要分多少页进行展示
@@ -143,8 +144,8 @@ public class RouteServiceImpl implements RouteService {
         result.put("data", routeList);
         result.put("totalCount", totalCount);
         result.put("totalPage", totalPage);
-        result.put("prePage",prePage);
-        result.put("nextPage",nextPage);
+        result.put("prePage", prePage);
+        result.put("nextPage", nextPage);
 
         // 转换为 JSON 字符串，并返回
         return JSON.toJSONString(result);

@@ -3,9 +3,12 @@ package com.zhangxl.dao.impl;
 import com.zhangxl.dao.RouteDao;
 import com.zhangxl.model.Route;
 import com.zhangxl.utils.C3p0Util;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -78,13 +81,33 @@ public class RouteDaoImpl implements RouteDao {
      *
      * @param startCount
      * @param pageSize
+     * @param cid
      * @return
      */
     @Override
-    public List<Route> pageQuery(int startCount, int pageSize) {
+    public List<Route> pageQuery(int startCount, int pageSize, String cid) {
 
-        String sql = "SELECT rid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_route WHERE rflag='1' LIMIT ?,?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Route>(Route.class), startCount, pageSize);
+        // 动态 SQL 拼接
+        StringBuilder sql = new StringBuilder("SELECT rid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_route WHERE rflag='1' ");
+
+        // 定义参数集合
+        List<Object> paramList = new ArrayList<>();
+
+        // cid 不为 空串、空白符、null
+        if (StringUtils.isNotBlank(cid)) {
+            // 动态拼接
+            sql.append(" And cid=? ");
+            // 加入参数
+            paramList.add(cid);
+        }
+
+        // 拼接分页条件
+        sql.append(" LIMIT ?,? ");
+        // 加入分页条件参数
+        paramList.add(startCount);
+        paramList.add(pageSize);
+
+        return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<Route>(Route.class), paramList.toArray());
     }
 
     /**
@@ -92,12 +115,26 @@ public class RouteDaoImpl implements RouteDao {
      * <pre>createTime:
      * 4/25/19 12:48 PM</pre>
      *
+     * @param cid
      * @return
      */
     @Override
-    public int queryTotalCount() {
+    public int queryTotalCount(String cid) {
 
-        String sql = "SELECT count(*) FROM tab_route WHERE rflag='1'";
-        return jdbcTemplate.queryForObject(sql,Integer.class);
+        // 创建动态 SQL
+        StringBuilder sql = new StringBuilder("SELECT count(*) FROM tab_route WHERE rflag='1' ");
+
+        // 定义参数集合
+        List<Object> paramList = new ArrayList<>();
+
+        // cid 不为 空串、空白符、null
+        if (StringUtils.isNotBlank(cid)) {
+            // 动态拼接
+            sql.append(" And cid=? ");
+            // 加入参数
+            paramList.add(cid);
+        }
+
+        return jdbcTemplate.queryForObject(sql.toString(), Integer.class, paramList.toArray());
     }
 }
