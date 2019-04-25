@@ -35,4 +35,14 @@ public interface RouteService {
      * @return
      */
     String pageQuery(String strpageNum, String strpageSize, String cid, String rname);
+
+    /**
+     * 处理获取 RouteDetail（线路详情） 的业务
+     * <pre>createTime:
+     * 4/25/19 6:38 PM</pre>
+     *
+     * @param rid
+     * @return
+     */
+    String queryRouteDetailByRid(String rid);
 }

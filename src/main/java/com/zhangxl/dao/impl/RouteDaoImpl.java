@@ -4,12 +4,14 @@ import com.zhangxl.dao.RouteDao;
 import com.zhangxl.model.Route;
 import com.zhangxl.utils.C3p0Util;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -153,6 +155,29 @@ public class RouteDaoImpl implements RouteDao {
             paramList.add("%" + rname + "%");
         }
 
-        return jdbcTemplate.queryForObject(sql.toString(), Integer.class, paramList.toArray());
+        try {
+            return jdbcTemplate.queryForObject(sql.toString(), Integer.class, paramList.toArray());
+        } catch (DataAccessException e) {
+            return 0;
+        }
+    }
+
+    /**
+     * 根据 rid 查出 Route 的所有相关信息
+     * <pre>createTime:
+     * 4/25/19 7:00 PM</pre>
+     *
+     * @param rid
+     * @return
+     */
+    @Override
+    public Map<String, Object> queryRouteDetailByRid(String rid) {
+
+        String sql = "SELECT * FROM tab_route tbr INNER JOIN tab_category tbc ON tbr.cid=tbc.cid INNER JOIN tab_seller tbs ON tbr.sid=tbs.sid WHERE tbr.rid=?";
+        try {
+            return jdbcTemplate.queryForMap(sql, rid);
+        } catch (DataAccessException e) {
+            return null;
+        }
     }
 }

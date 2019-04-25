@@ -2,8 +2,11 @@ package com.zhangxl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.zhangxl.dao.RouteDao;
+import com.zhangxl.dao.RouteImgDao;
 import com.zhangxl.dao.impl.RouteDaoImpl;
+import com.zhangxl.dao.impl.RouteImgDaoImpl;
 import com.zhangxl.model.Route;
+import com.zhangxl.model.RouteImg;
 import com.zhangxl.service.RouteService;
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,6 +31,7 @@ public class RouteServiceImpl implements RouteService {
      * 初始化 dao
      */
     private RouteDao routeDao = new RouteDaoImpl();
+    private RouteImgDao routeImgDao = new RouteImgDaoImpl();
 
     /**
      * 处理黑马精选路线业务
@@ -150,5 +154,27 @@ public class RouteServiceImpl implements RouteService {
 
         // 转换为 JSON 字符串，并返回
         return JSON.toJSONString(result);
+    }
+
+    /**
+     * 处理获取 RouteDetail（线路详情） 的业务
+     * <pre>createTime:
+     * 4/25/19 6:38 PM</pre>
+     *
+     * @param rid
+     * @return
+     */
+    @Override
+    public String queryRouteDetailByRid(String rid) {
+
+        // 调用 Dao 层获取所有的信息
+        Map<String, Object> routeDetail = routeDao.queryRouteDetailByRid(rid);
+
+        // 调用 Dao 层获取图片信息
+        List<RouteImg> routeImgs = routeImgDao.queryByRid(rid);
+        // 将查到的图片信息追加到 routeDetail 中
+        routeDetail.put("routeImgs", routeImgs);
+
+        return JSON.toJSONString(routeDetail);
     }
 }

@@ -77,4 +77,28 @@ public class RouteServlet extends BaseServlet {
         }
 
     }
+
+    /**
+     * 接收查看线路详情的请求
+     * <pre>createTime:
+     * 4/25/19 6:26 PM</pre>
+     *
+     * @param req
+     * @param resp
+     */
+    private void queryRouteDetail(HttpServletRequest req, HttpServletResponse resp) {
+
+        // 接收请求数据
+        String rid = req.getParameter("rid");
+
+        // 处理数据：调用 Service 层处理业务
+        String jsonRouteDetail = routeService.queryRouteDetailByRid(rid);
+
+        // 响应数据
+        try {
+            resp.getWriter().println(jsonRouteDetail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

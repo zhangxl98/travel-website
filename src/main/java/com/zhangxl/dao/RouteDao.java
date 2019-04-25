@@ -3,6 +3,7 @@ package com.zhangxl.dao;
 import com.zhangxl.model.Route;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -70,4 +71,14 @@ public interface RouteDao {
      * @return
      */
     int queryTotalCount(String cid, String rname);
+
+    /**
+     * 根据 rid 查询 Route 的详情
+     * <pre>createTime:
+     * 4/25/19 6:58 PM</pre>
+     *
+     * @param rid
+     * @return
+     */
+    Map<String, Object> queryRouteDetailByRid(String rid);
 }
