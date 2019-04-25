@@ -82,10 +82,11 @@ public class RouteDaoImpl implements RouteDao {
      * @param startCount
      * @param pageSize
      * @param cid
+     * @param rname
      * @return
      */
     @Override
-    public List<Route> pageQuery(int startCount, int pageSize, String cid) {
+    public List<Route> pageQuery(int startCount, int pageSize, String cid, String rname) {
 
         // 动态 SQL 拼接
         StringBuilder sql = new StringBuilder("SELECT rid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_route WHERE rflag='1' ");
@@ -96,9 +97,17 @@ public class RouteDaoImpl implements RouteDao {
         // cid 不为 空串、空白符、null
         if (StringUtils.isNotBlank(cid)) {
             // 动态拼接
-            sql.append(" And cid=? ");
+            sql.append(" AND cid=? ");
             // 加入参数
             paramList.add(cid);
+        }
+
+        // rname 不为 空串、空白符、null
+        if (StringUtils.isNotBlank(rname)) {
+            // 动态拼接
+            sql.append(" AND rname LIKE? ");
+            // 加入参数 -- 模糊匹配
+            paramList.add("%" + rname + "%");
         }
 
         // 拼接分页条件
@@ -116,10 +125,11 @@ public class RouteDaoImpl implements RouteDao {
      * 4/25/19 12:48 PM</pre>
      *
      * @param cid
+     * @param rname
      * @return
      */
     @Override
-    public int queryTotalCount(String cid) {
+    public int queryTotalCount(String cid, String rname) {
 
         // 创建动态 SQL
         StringBuilder sql = new StringBuilder("SELECT count(*) FROM tab_route WHERE rflag='1' ");
@@ -130,9 +140,17 @@ public class RouteDaoImpl implements RouteDao {
         // cid 不为 空串、空白符、null
         if (StringUtils.isNotBlank(cid)) {
             // 动态拼接
-            sql.append(" And cid=? ");
+            sql.append(" AND cid=? ");
             // 加入参数
             paramList.add(cid);
+        }
+
+        // rname 不为 空串、空白符、null
+        if (StringUtils.isNotBlank(rname)) {
+            // 动态拼接
+            sql.append(" AND rname LIKE ? ");
+            // 加入参数 -- 模糊匹配
+            paramList.add("%" + rname + "%");
         }
 
         return jdbcTemplate.queryForObject(sql.toString(), Integer.class, paramList.toArray());

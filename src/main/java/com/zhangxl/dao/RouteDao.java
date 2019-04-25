@@ -55,9 +55,10 @@ public interface RouteDao {
      * @param startCount
      * @param pageSize
      * @param cid
+     * @param rname
      * @return
      */
-    List<Route> pageQuery(int startCount, int pageSize, String cid);
+    List<Route> pageQuery(int startCount, int pageSize, String cid, String rname);
 
     /**
      * 查询 tab_route 表中的记录有效条数
@@ -65,7 +66,8 @@ public interface RouteDao {
      * 4/25/19 12:46 PM</pre>
      *
      * @param cid
+     * @param rname
      * @return
      */
-    int queryTotalCount(String cid);
+    int queryTotalCount(String cid, String rname);
 }

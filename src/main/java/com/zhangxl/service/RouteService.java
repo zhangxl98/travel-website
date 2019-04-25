@@ -31,7 +31,8 @@ public interface RouteService {
      * @param strpageNum
      * @param strpageSize
      * @param cid
+     * @param rname
      * @return
      */
-    String pageQuery(String strpageNum, String strpageSize, String cid);
+    String pageQuery(String strpageNum, String strpageSize, String cid, String rname);
 }

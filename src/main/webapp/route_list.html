@@ -33,7 +33,7 @@
 					<span class="jg">价格</span>
 				</div>
 				<ul id="routeList">
-					// 动态生成线路列表
+					<!-- 动态生成线路列表 -->
 				</ul>
 				<div class="page_num_inf">
 					<i></i> 共
@@ -41,7 +41,7 @@
 				</div>
 				<div class="pageNum">
 					<ul id="pageLine">
-						// 动态生成分页条
+						<!-- 动态生成分页条 -->
 					</ul>
 				</div>
 			</div>
@@ -107,6 +107,13 @@
 	// 获取地址栏后的 cid 参数的值
 	var cid = getParameter("cid")
 
+	// 获取地址栏后 rname 参数的值
+	var rname = getParameter("rname");
+	// 将地址栏中的 rname  的值解码为中文
+	if (rname) {
+		rname = decodeURI(rname)
+	}
+
 
 	//页面加载完成之后 查询第一页数据
 	$(function () {
@@ -116,7 +123,12 @@
 	// 加载分页数据
 	function getPageData(pageNum, pageSize) {
 		//发送异步请求加载分页数据
-		$.get("/route.do?op=routePageQuery", {pageNum: pageNum, pageSize: pageSize, cid: cid}, function (pageData) {
+		$.get("/route.do?op=routePageQuery", {
+			pageNum: pageNum,
+			pageSize: pageSize,
+			cid: cid,
+			rname: rname
+		}, function (pageData) {
 
 			// 获取后端响应的数据 -- 线路
 			var routeList = pageData.data

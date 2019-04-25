@@ -64,9 +64,10 @@ public class RouteServlet extends BaseServlet {
         String strpageSize = req.getParameter("pageSize");
         String strpageNum = req.getParameter("pageNum");
         String cid = req.getParameter("cid");
+        String rname = req.getParameter("rname");
 
         // 处理数据：调用 Service 层分页查询
-        String jsonPageData =  routeService.pageQuery(strpageNum,strpageSize,cid);
+        String jsonPageData = routeService.pageQuery(strpageNum, strpageSize, cid, rname);
 
         // 响应数据
         try {

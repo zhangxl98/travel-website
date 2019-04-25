@@ -23,8 +23,8 @@
 				<a href="/"><img src="images/logo.jpg" alt=""></a>
 			</div>
 			<div class="search">
-				<input name="" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
-				<a href="javascript:;" class="search-button">搜索</a>
+				<input name="" id="rname" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
+				<a href="javascript:;" onclick="searchByRname();" class="search-button">搜索</a>
 			</div>
 			<div class="hottel">
 				<div class="hot_pic">
@@ -42,16 +42,15 @@
 <!-- 首页导航 -->
 <div class="navitem">
 	<ul class="nav" id="categoryList">
-		// 动态生成导航条
+		<!-- 动态生成导航条 -->
 	</ul>
 </div>
 
 <script>
 
-
 	//页面加载完成之后  获取登录用户的信息--把用户名添加到页面中
 	$(function () {
-		//debugger;
+
 		//发送请求  处理响应数据
 		$.get("/user.do?op=getLoginUser", function (result) {
 
@@ -83,7 +82,6 @@
 		//1、查询所有的商品类别信息（发送请求到服务器）
 		$.get("/category.do?op=queryAll", function (result) {
 			//2、把数据展示到导航栏上（处理响应数据）
-			console.log(result);
 
 			//遍历数组： for(var i = 0;i<arr.length;i++){   }
 
@@ -96,17 +94,28 @@
 			* */
 
 
-			var categoryHtml = '<li class="nav-active"><a href="index.html">首页</a></li>';
+			var categoryHtml = '<li class="nav-active"><a href="index.html">首页</a></li>'
 
 			//jq遍历
 			$(result).each(function (index, element) {
-				categoryHtml += '<li><a href="route_list.html?cid=' + element.cid + '">' + element.cname + '</a></li>';
-			});
-			categoryHtml += '<li><a href="favoriterank.html">收藏排行榜</a></li>';
+				categoryHtml += '<li><a href="route_list.html?cid=' + element.cid + '">' + element.cname + '</a></li>'
+			})
+			categoryHtml += '<li><a href="favoriterank.html">收藏排行榜</a></li>'
 
 			//把字符串插入到导航栏中
-			$("#categoryList").html(categoryHtml);
-		}, "json");
+			$("#categoryList").html(categoryHtml)
+		}, "json")
 
-	});
+	})
+
+	// 获取搜索框中的内容
+	function searchByRname() {
+		var rname = $("#rname").val()
+		var cid = getParameter("cid");
+		// 页面跳转
+		if (cid && rname)
+			location.href = "/route_list.html?cid=" + cid + "&rname=" + rname
+		else if (rname)
+			location.href = "/route_list.html?rname=" + rname
+	}
 </script>
