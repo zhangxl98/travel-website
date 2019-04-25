@@ -69,9 +69,7 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public String pageQuery(String strpageNum, String strpageSize) {
 
-        /**
-         * 初始化 pageNum、pageSize
-         */
+        // 初始化 pageNum、pageSize
         int pageNum = 1;
         int pageSize = 10;
 
@@ -107,12 +105,46 @@ public class RouteServiceImpl implements RouteService {
         int startCount = (pageNum - 1) * pageSize;
 
         // 调用 Dao 层，获取分页数据
-        List<Route> routeList = routeDao.pageQuery(startCount,pageSize);
+        List<Route> routeList = routeDao.pageQuery(startCount, pageSize);
+
+        // 调用 Dao 层，获取 Route （旅游线路）的总条数
+        int totalCount = routeDao.queryTotalCount();
+
+        /*
+          计算出总共需要分多少页进行展示
+          共有 2 种情况：
+            1.totalCount 刚好是 pageSize 的倍数   ==> totalCount % pageSize == 0;
+                totalPage = totalCount / pageSize;
+            2.totalCount 不是 pageSize 的倍数   ==> totalCount % pageSize ！= 0;
+                totalPage = totalCount / pageSize + 1;
+
+          使用三元运算
+
+          Date: 4/25/19 12:38 PM
+        */
+        int totalPage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
+
+
+        /*
+          计算上一页和下一页的逻辑
+          当前页： pageNum
+          上一页： prePage
+          下一页： nextPage
+
+          Date: 4/25/19 2:24 PM
+        */
+        int prePage = pageNum == 1 ? 1 : pageNum - 1;
+        int nextPage = pageNum == totalPage ? totalCount : pageNum + 1;
+
 
         // 封装数据
         // 用于封装数据的 Map
         Map<String, Object> result = new HashMap<>();
-        result.put("data",routeList);
+        result.put("data", routeList);
+        result.put("totalCount", totalCount);
+        result.put("totalPage", totalPage);
+        result.put("prePage",prePage);
+        result.put("nextPage",nextPage);
 
         // 转换为 JSON 字符串，并返回
         return JSON.toJSONString(result);

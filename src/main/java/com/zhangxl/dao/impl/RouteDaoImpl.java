@@ -86,4 +86,18 @@ public class RouteDaoImpl implements RouteDao {
         String sql = "SELECT rid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_route WHERE rflag='1' LIMIT ?,?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Route>(Route.class), startCount, pageSize);
     }
+
+    /**
+     * 查询 tab_route 表中的记录有效条数
+     * <pre>createTime:
+     * 4/25/19 12:48 PM</pre>
+     *
+     * @return
+     */
+    @Override
+    public int queryTotalCount() {
+
+        String sql = "SELECT count(*) FROM tab_route WHERE rflag='1'";
+        return jdbcTemplate.queryForObject(sql,Integer.class);
+    }
 }

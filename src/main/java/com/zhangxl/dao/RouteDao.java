@@ -57,4 +57,13 @@ public interface RouteDao {
      * @return
      */
     List<Route> pageQuery(int startCount, int pageSize);
+
+    /**
+     * 查询 tab_route 表中的记录有效条数
+     * <pre>createTime:
+     * 4/25/19 12:46 PM</pre>
+     *
+     * @return
+     */
+    int queryTotalCount();
 }
