@@ -112,7 +112,7 @@ public class RouteServiceImpl implements RouteService {
         // 封装数据
         // 用于封装数据的 Map
         Map<String, Object> result = new HashMap<>();
-        result.put("pageData",routeList);
+        result.put("data",routeList);
 
         // 转换为 JSON 字符串，并返回
         return JSON.toJSONString(result);
