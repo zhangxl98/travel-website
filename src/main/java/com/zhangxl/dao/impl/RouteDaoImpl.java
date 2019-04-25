@@ -70,4 +70,20 @@ public class RouteDaoImpl implements RouteDao {
         String sql = "SELECT rid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_route WHERE rflag='1' AND isThemeTour='1' ORDER BY rdate DESC LIMIT 0,4";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Route.class));
     }
+
+    /**
+     * 根据传入的 startCount 和 pageSize 进行分页查询
+     * <pre>createTime:
+     * 4/25/19 11:02 AM</pre>
+     *
+     * @param startCount
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public List<Route> pageQuery(int startCount, int pageSize) {
+
+        String sql = "SELECT rid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_route WHERE rflag='1' LIMIT ?,?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Route>(Route.class), startCount, pageSize);
+    }
 }

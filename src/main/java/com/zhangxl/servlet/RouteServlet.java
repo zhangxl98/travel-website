@@ -49,4 +49,30 @@ public class RouteServlet extends BaseServlet {
         }
 
     }
+
+    /**
+     * 接收分页查询线路
+     * <pre>createTime:
+     * 4/25/19 10:16 AM</pre>
+     *
+     * @param req
+     * @param resp
+     */
+    private void routePageQuery(HttpServletRequest req, HttpServletResponse resp) {
+
+        // 接收请求数据
+        String strpageSize = req.getParameter("pageSize");
+        String strpageNum = req.getParameter("pageNum");
+
+        // 处理数据：调用 Service 层分页查询
+        String jsonPageData =  routeService.pageQuery(strpageNum,strpageSize);
+
+        // 响应数据
+        try {
+            resp.getWriter().println(jsonPageData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

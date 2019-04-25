@@ -22,4 +22,15 @@ public interface RouteService {
      * @return
      */
     String getRouteCareChoose();
+
+    /**
+     * 处理分页查询线路业务
+     * <pre>createTime:
+     * 4/25/19 10:22 AM</pre>
+     *
+     * @param strpageNum
+     * @param strpageSize
+     * @return
+     */
+    String pageQuery(String strpageNum, String strpageSize);
 }

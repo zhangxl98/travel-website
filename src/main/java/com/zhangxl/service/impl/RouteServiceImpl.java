@@ -5,6 +5,7 @@ import com.zhangxl.dao.RouteDao;
 import com.zhangxl.dao.impl.RouteDaoImpl;
 import com.zhangxl.model.Route;
 import com.zhangxl.service.RouteService;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +54,67 @@ public class RouteServiceImpl implements RouteService {
         result.put("themeRouteList", themeRouteList);
 
         // 转换为 JSON 字符串并返回
+        return JSON.toJSONString(result);
+    }
+
+    /**
+     * 处理分页查询线路业务
+     * <pre>createTime:
+     * 4/25/19 10:22 AM</pre>
+     *
+     * @param strpageNum
+     * @param strpageSize
+     * @return
+     */
+    @Override
+    public String pageQuery(String strpageNum, String strpageSize) {
+
+        /**
+         * 初始化 pageNum、pageSize
+         */
+        int pageNum = 1;
+        int pageSize = 10;
+
+        /*
+          blank：代表的是空串("")、空白符(空格""，" "，制表符"\t"，回车符"\r"，"\n"等)以及null值
+          isNotBlank() ==> 判断单个字符串是否为空
+
+          Date: 4/25/19 10:40 AM
+        */
+
+        /*
+          接收前端页面传递的 strpageNum 和 strpageSize
+
+          Date: 4/25/19 10:46 AM
+        */
+        if (StringUtils.isNotBlank(strpageNum)) {
+            // 如果 strpageNum 不为空
+            pageNum = Integer.valueOf(strpageNum);
+        }
+
+        if (StringUtils.isNotBlank(strpageSize)) {
+            // 如果 strpageSize 不为空
+            pageSize = Integer.valueOf(strpageSize);
+        }
+
+        /*
+          计算起始记录
+          LIMIT startCount,pageSize
+          数据库从第几条记录开始查询
+
+          Date: 4/25/19 10:48 AM
+        */
+        int startCount = (pageNum - 1) * pageSize;
+
+        // 调用 Dao 层，获取分页数据
+        List<Route> routeList = routeDao.pageQuery(startCount,pageSize);
+
+        // 封装数据
+        // 用于封装数据的 Map
+        Map<String, Object> result = new HashMap<>();
+        result.put("pageData",routeList);
+
+        // 转换为 JSON 字符串，并返回
         return JSON.toJSONString(result);
     }
 }

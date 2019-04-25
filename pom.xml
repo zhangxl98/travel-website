@@ -105,6 +105,13 @@
       <version>1.5</version>
     </dependency>
 
+    <!--处理字符串的工具类-->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.4</version>
+    </dependency>
+
   </dependencies>
 
   <build>

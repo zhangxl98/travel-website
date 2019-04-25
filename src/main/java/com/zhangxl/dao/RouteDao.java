@@ -46,4 +46,15 @@ public interface RouteDao {
      * @return
      */
     List<Route> queryByIsThemeTour();
+
+    /**
+     * 根据传入的 startCount 和 pageSize 进行分页查询
+     * <pre>createTime:
+     * 4/25/19 11:01 AM</pre>
+     *
+     * @param startCount
+     * @param pageSize
+     * @return
+     */
+    List<Route> pageQuery(int startCount, int pageSize);
 }
