@@ -70,9 +70,10 @@
 					<span>起</span></p>
 				<p class="collect">
 					<!-- 未被收藏 -->
-					<a class="btn" id="favorite_ok"><i class="glyphicon glyphicon-heart-empty"></i>点击收藏</a>
+					<a class="btn" id="favorite_ok" onclick="addFavorite()"><i
+									class="glyphicon glyphicon-heart-empty"></i>点击收藏</a>
 					<!-- 已被收藏 -->
-					<a class="btn already" id="favorite_no" disabled="disabled"><i class="glyphicon glyphicon-heart-empty"></i>点击收藏</a>
+					<a class="btn already" id="favorite_no" disabled="disabled"><i class="glyphicon glyphicon-heart-empty"></i>已收藏</a>
 					<span id="roteCount">
 						<!-- 动态显示收藏数 -->
 					</span>
@@ -278,7 +279,7 @@
 		// 向服务器发送请求
 		$.get("favorite.do?op=isFavorite", {rid: rid}, function (result) {
 			if (result.isFavorite)
-				// true ==> 已被收藏 ==> 隐藏未被收藏按钮
+			// true ==> 已被收藏 ==> 隐藏未被收藏按钮
 				$("#favorite_ok").hide()
 			else
 			// false ==> 未登录或未被收藏 ==> 隐藏已被收藏按钮
@@ -286,6 +287,27 @@
 
 		}, "json")
 	})
+
+	// 点击收藏按钮，实现收藏功能
+	function addFavorite() {
+		// 获取当前 Route 的 rid
+		var rid = getParameter("rid");
+		// 向服务器发送请求
+		$.get("favorite.do?op=addFavorite", {rid: rid}, function (result) {
+			if (!result.loginFlag) {
+				// 用户未登录 ==> 跳转到登录页面
+				location.href = "/login.html"
+			} else {
+				// 用户已登录
+				// 更新线路收藏数
+				$("#roteCount").html("已收藏" + result.routeCount + "次")
+				// 隐藏未被收藏按钮
+				$("#favorite_ok").hide()
+				// 显示已被收藏按钮
+				$("#favorite_no").show()
+			}
+		}, "json")
+	}
 </script>
 </body>
 

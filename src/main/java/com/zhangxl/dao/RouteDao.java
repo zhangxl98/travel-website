@@ -81,4 +81,23 @@ public interface RouteDao {
      * @return
      */
     Map<String, Object> queryRouteDetailByRid(String rid);
+
+    /**
+     * 根据 rid 查询 count（收藏数量）
+     * <pre>createTime:
+     * 4/26/19 11:13 AM</pre>
+     *
+     * @param rid
+     * @return
+     */
+    int queryCountByRid(Integer rid);
+
+    /**
+     * 更新 count（收藏量）count++
+     * <pre>createTime:
+     * 4/26/19 11:47 AM</pre>
+     *
+     * @param rid
+     */
+    void updateCountByRid(Integer rid);
 }

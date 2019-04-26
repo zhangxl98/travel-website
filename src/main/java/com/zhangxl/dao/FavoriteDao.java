@@ -25,4 +25,15 @@ public interface FavoriteDao {
      * @return
      */
     Favorite queryByRidUid(String strRid, Integer uid);
+
+    /**
+     * 对传入的 rid 和 uid 进行数据持久化
+     * <pre>createTime:
+     * 4/26/19 10:40 AM</pre>
+     *
+     * @param rid
+     * @param uid
+     * @return
+     */
+    int save(Integer rid, Integer uid);
 }

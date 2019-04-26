@@ -59,4 +59,38 @@ public class FavoriteServlet extends BaseServlet {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 接收用户添加收藏的请求
+     * <pre>createTime:
+     * 4/26/19 10:05 AM</pre>
+     *
+     * @param req
+     * @param resp
+     */
+    private void addFavorite(HttpServletRequest req, HttpServletResponse resp) {
+
+        // 接收请求数据
+        String strRid = req.getParameter("rid");
+
+        // 处理数据
+        // 获取当前登录的用户
+        User loginUser = (User) req.getSession().getAttribute("loginUser");
+
+        /*
+          调用 Service 层处理业务，判断是否收藏成功
+          添加成功 ==> addFavoriteFlag = true, RouteCount = Route.count
+          添加失败 ==> addFavoriteFlag = false, RouteCount = Route.count
+
+          Date: 4/26/19 10:09 AM
+        */
+        String jsonAddFavorite = favoriteService.addFavorite(strRid,loginUser);
+
+        // 响应数据
+        try {
+            resp.getWriter().println(jsonAddFavorite);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

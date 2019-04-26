@@ -25,4 +25,15 @@ public interface FavoriteService {
      * @return
      */
     String isFavorite(String strRid, User loginUser);
+
+    /**
+     * 根据传入的 strRid 和 loginUser 执行 addFavorite 功能
+     * <pre>createTime:
+     * 4/26/19 10:17 AM</pre>
+     *
+     * @param strRid
+     * @param loginUser
+     * @return
+     */
+    String addFavorite(String strRid, User loginUser);
 }

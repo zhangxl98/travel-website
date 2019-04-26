@@ -8,6 +8,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.Date;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -51,5 +53,21 @@ public class FavoriteDaoImpl implements FavoriteDao {
             }
         }
         return null;
+    }
+
+    /**
+     * 对传入的 rid 和 uid 进行数据持久化操作
+     * <pre>createTime:
+     * 4/26/19 10:41 AM</pre>
+     *
+     * @param rid
+     * @param uid
+     * @return
+     */
+    @Override
+    public int save(Integer rid, Integer uid) {
+
+        String sql = "INSERT INTO tab_favorite (rid, date, uid) VALUES (?,?,?)";
+        return jdbcTemplate.update(sql, rid, new Date(), uid);
     }
 }

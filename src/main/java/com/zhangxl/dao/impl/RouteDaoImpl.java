@@ -180,4 +180,33 @@ public class RouteDaoImpl implements RouteDao {
             return null;
         }
     }
+
+    /**
+     * 根据 rid 查询 count（收藏数量）
+     * <pre>createTime:
+     * 4/26/19 11:13 AM</pre>
+     *
+     * @param rid
+     * @return
+     */
+    @Override
+    public int queryCountByRid(Integer rid) {
+
+        String sql = "SELECT count FROM tab_route WHERE rid=?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, rid);
+    }
+
+    /**
+     * 更新 count（收藏量）count++
+     * <pre>createTime:
+     * 4/26/19 11:47 AM</pre>
+     *
+     * @param rid
+     */
+    @Override
+    public void updateCountByRid(Integer rid) {
+
+        String sql = "UPDATE tab_route SET count=count+1 WHERE rid=?";
+        jdbcTemplate.update(sql, rid);
+    }
 }
