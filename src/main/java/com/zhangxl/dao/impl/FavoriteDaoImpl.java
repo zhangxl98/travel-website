@@ -102,6 +102,10 @@ public class FavoriteDaoImpl implements FavoriteDao {
     public int queryTotalCount(Integer uid) {
 
         String sql = "SELECT count(*) FROM tab_favorite WHERE uid=?";
-        return jdbcTemplate.queryForObject(sql,Integer.class,uid);
+        try {
+            return jdbcTemplate.queryForObject(sql,Integer.class,uid);
+        } catch (DataAccessException e) {
+            return 0;
+        }
     }
 }

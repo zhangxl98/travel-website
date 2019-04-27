@@ -114,7 +114,7 @@ public class RouteServiceImpl implements RouteService {
         List<Route> routeList = routeDao.pageQuery(startCount, pageSize, cid, rname);
 
         // 调用 Dao 层，获取 Route （旅游线路）的总条数
-        int totalCount = routeDao.queryTotalCount(cid, rname);
+        int totalCount = routeDao.queryTotalCountByCidRname(cid, rname);
 
         /*
           计算出总共需要分多少页进行展示
@@ -176,5 +176,66 @@ public class RouteServiceImpl implements RouteService {
         routeDetail.put("routeImgs", routeImgs);
 
         return JSON.toJSONString(routeDetail);
+    }
+
+    /**
+     * 处理分页查询收藏排行榜的业务
+     * <pre>createTime:
+     * 4/27/19 11:27 AM</pre>
+     *
+     * @param strPageNum
+     * @param strPageSize
+     * @return
+     */
+    @Override
+    public String favoriteRangePageQuery(String strPageNum, String strPageSize) {
+
+        // 用于封装数据的 Map
+        Map<String, Object> result = new HashMap<>(16);
+
+
+        // 初始化 pageNum、pageSize
+        int pageNum = 1;
+        int pageSize = 8;
+
+        // 获取 pageNum、pageSize
+        if (StringUtils.isNotBlank(strPageNum)) {
+            pageNum = Integer.valueOf(strPageNum);
+        }
+        if (StringUtils.isNotBlank(strPageSize)) {
+            pageSize = Integer.valueOf(strPageSize);
+        }
+
+
+        /*
+          计算 startCount
+          LIMT startCount,pageSize
+
+          Date: 4/27/19 11:33 AM
+        */
+        int startCount = (pageNum - 1) * pageSize;
+
+        // 调用 Dao 层，获取分页数据
+        List<Route> routeList = routeDao.pageQueryOrderByCount(startCount, pageSize);
+
+        // 分页条计算
+
+        // 调用 Dao 层，获取总记录条数
+        int totalCount = routeDao.queryTotalCount();
+        // 计算出 totalPage
+        int totalPage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
+        // 计算 prePage 和 nextPage
+        int prePage = pageNum == 1 ? 1 : pageNum - 1;
+        int nextPage = pageNum == totalPage ? totalPage : pageNum + 1;
+
+
+        // 封装数据
+        result.put("routeList", routeList);
+        result.put("totalPage",totalPage);
+        result.put("prePage",prePage);
+        result.put("nextPage",nextPage);
+
+        // 将结果集转换为 JSON 并返回
+        return JSON.toJSONString(result);
     }
 }

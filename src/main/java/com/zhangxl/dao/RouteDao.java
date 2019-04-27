@@ -70,7 +70,7 @@ public interface RouteDao {
      * @param rname
      * @return
      */
-    int queryTotalCount(String cid, String rname);
+    int queryTotalCountByCidRname(String cid, String rname);
 
     /**
      * 根据 rid 查询 Route 的详情
@@ -100,4 +100,24 @@ public interface RouteDao {
      * @param rid
      */
     void updateCountByRid(Integer rid);
+
+    /**
+     * 分页查询 Route 按照 Count 降序
+     * <pre>createTime:
+     * 4/27/19 12:27 PM</pre>
+     *
+     * @param startCount
+     * @param pageSize
+     * @return
+     */
+    List<Route> pageQueryOrderByCount(int startCount, int pageSize);
+
+    /**
+     * 按条件查询符合的记录条数
+     * <pre>createTime:
+     * 4/27/19 12:44 PM</pre>
+     *
+     * @return
+     */
+    int queryTotalCount();
 }

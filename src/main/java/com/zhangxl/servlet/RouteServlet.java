@@ -101,4 +101,29 @@ public class RouteServlet extends BaseServlet {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 接收收藏排行榜查询的请求
+     * <pre>createTime:
+     * 4/27/19 11:19 AM</pre>
+     *
+     * @param req
+     * @param resp
+     */
+    private void favoriteRangePageQuery(HttpServletRequest req, HttpServletResponse resp) {
+
+        // 接收请求数据
+        String strPageNum = req.getParameter("pageNum");
+        String strPageSize = req.getParameter("pageSize");
+
+        // 处理数据：调用 Service 层处理业务
+        String jsonPageData = routeService.favoriteRangePageQuery(strPageNum,strPageSize);
+
+        // 响应数据
+        try {
+            resp.getWriter().println(jsonPageData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

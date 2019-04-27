@@ -131,7 +131,7 @@ public class RouteDaoImpl implements RouteDao {
      * @return
      */
     @Override
-    public int queryTotalCount(String cid, String rname) {
+    public int queryTotalCountByCidRname(String cid, String rname) {
 
         // 创建动态 SQL
         StringBuilder sql = new StringBuilder("SELECT count(*) FROM tab_route WHERE rflag='1' ");
@@ -208,5 +208,39 @@ public class RouteDaoImpl implements RouteDao {
 
         String sql = "UPDATE tab_route SET count=count+1 WHERE rid=?";
         jdbcTemplate.update(sql, rid);
+    }
+
+    /**
+     * 分页查询 Route 按照 Count 降序
+     * <pre>createTime:
+     * 4/27/19 12:28 PM</pre>
+     *
+     * @param startCount
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public List<Route> pageQueryOrderByCount(int startCount, int pageSize) {
+
+        String sql = "SELECT rid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_route WHERE rflag='1' ORDER BY count DESC LIMIT ?,?";
+        return jdbcTemplate.query(sql,new BeanPropertyRowMapper<Route>(Route.class),startCount,pageSize);
+    }
+
+    /**
+     * 按条件查询符合的记录条数
+     * <pre>createTime:
+     * 4/27/19 12:44 PM</pre>
+     *
+     * @return
+     */
+    @Override
+    public int queryTotalCount() {
+
+        String sql = "SELECT count(*) FROM tab_route WHERE rflag='1' ORDER BY count DESC";
+        try {
+            return jdbcTemplate.queryForObject(sql,Integer.class);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

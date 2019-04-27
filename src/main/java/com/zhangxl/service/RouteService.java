@@ -45,4 +45,15 @@ public interface RouteService {
      * @return
      */
     String queryRouteDetailByRid(String rid);
+
+    /**
+     * 处理分页查询收藏排行榜的业务
+     * <pre>createTime:
+     * 4/27/19 11:26 AM</pre>
+     *
+     * @param strPageNum
+     * @param strPageSize
+     * @return
+     */
+    String favoriteRangePageQuery(String strPageNum, String strPageSize);
 }
