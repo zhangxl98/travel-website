@@ -84,11 +84,38 @@ public class FavoriteServlet extends BaseServlet {
 
           Date: 4/26/19 10:09 AM
         */
-        String jsonAddFavorite = favoriteService.addFavorite(strRid,loginUser);
+        String jsonAddFavorite = favoriteService.addFavorite(strRid, loginUser);
 
         // 响应数据
         try {
             resp.getWriter().println(jsonAddFavorite);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 接收查询收藏分页的请求
+     * <pre>createTime:
+     * 4/26/19 3:57 PM</pre>
+     *
+     * @param req
+     * @param resp
+     */
+    private void favoriteQueryPage(HttpServletRequest req, HttpServletResponse resp) {
+
+        // 接收请求数据
+        String strPageNum = req.getParameter("pageNum");
+        String strPageSize = req.getParameter("pageSize");
+
+        User loginUser = (User) req.getSession().getAttribute("loginUser");
+
+        // 处理数据：调用 Service 层处理分页查询业务
+        String jsonPageData = favoriteService.queryPage(strPageNum, strPageSize, loginUser);
+
+        // 响应数据
+        try {
+            resp.getWriter().println(jsonPageData);
         } catch (IOException e) {
             e.printStackTrace();
         }

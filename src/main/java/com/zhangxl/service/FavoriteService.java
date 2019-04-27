@@ -36,4 +36,16 @@ public interface FavoriteService {
      * @return
      */
     String addFavorite(String strRid, User loginUser);
+
+    /**
+     * 处理分页查询收藏的业务
+     * <pre>createTime:
+     * 4/26/19 4:04 PM</pre>
+     *
+     * @param strPageNum
+     * @param strPageSize
+     * @param loginUser
+     * @return
+     */
+    String queryPage(String strPageNum, String strPageSize, User loginUser);
 }

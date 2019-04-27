@@ -18,6 +18,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -176,6 +177,69 @@ public class FavoriteServiceImpl implements FavoriteService {
 
           Date: 4/26/19 10:51 AM
         */
+
+        // 将结果集转换为 JSON 并返回
+        return JSON.toJSONString(result);
+    }
+
+    /**
+     * 处理分页查询收藏的业务
+     * <pre>createTime:
+     * 4/26/19 4:05 PM</pre>
+     *
+     * @param strPageNum
+     * @param strPageSize
+     * @param loginUser
+     * @return
+     */
+    @Override
+    public String queryPage(String strPageNum, String strPageSize, User loginUser) {
+
+        // 创建用于封装结果的 Map
+        Map<String, Object> result = new HashMap<>(16);
+
+         /*
+          判断用户是否已登录
+          用户已登陆 ==> null != loginUser ==> loginFlag = true
+
+          Date: 4/26/19 10:29 AM
+        */
+        result.put("loginFlag", (null != loginUser));
+
+        // 用户已登录，进行数据分页
+        if (null != loginUser) {
+
+            /**
+             * 初始化 pageNum、pageSize
+             */
+            int pageNum = 1;
+            int pageSize = 12;
+
+            // 判断传入的数据是否为空串、空白符、null
+            if (StringUtils.isNotBlank(strPageNum)) {
+                pageNum = Integer.valueOf(strPageNum);
+            }
+            if (StringUtils.isNotBlank(strPageSize)) {
+                pageSize = Integer.valueOf(strPageSize);
+            }
+
+
+            /*
+              计算起始记录（数据库从哪条开始查）
+              LIMIT startCount,pageSize
+
+              Date: 4/27/19 8:23 AM
+            */
+            int startCount = (pageNum - 1) * pageSize;
+
+            // 调用 Dao 层，获取分页数据
+            List<Map<String,Object>> pageData = favoriteDao.pageQuery(loginUser.getUid(),startCount,pageSize);
+
+
+            // 封装数据
+            result.put("pageData",pageData);
+        }
+
 
         // 将结果集转换为 JSON 并返回
         return JSON.toJSONString(result);

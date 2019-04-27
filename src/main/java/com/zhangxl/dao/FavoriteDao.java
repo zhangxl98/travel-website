@@ -2,6 +2,9 @@ package com.zhangxl.dao;
 
 import com.zhangxl.model.Favorite;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -36,4 +39,16 @@ public interface FavoriteDao {
      * @return
      */
     int save(Integer rid, Integer uid);
+
+    /**
+     * 根据传入的参数进行分页查询
+     * <pre>createTime:
+     * 4/27/19 8:37 AM</pre>
+     *
+     * @param uid
+     * @param startCount
+     * @param pageSize
+     * @return
+     */
+    List<Map<String, Object>> pageQuery(Integer uid, int startCount, int pageSize);
 }

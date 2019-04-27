@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -69,5 +71,22 @@ public class FavoriteDaoImpl implements FavoriteDao {
 
         String sql = "INSERT INTO tab_favorite (rid, date, uid) VALUES (?,?,?)";
         return jdbcTemplate.update(sql, rid, new Date(), uid);
+    }
+
+    /**
+     * 根据传入的参数进行分页查询
+     * <pre>createTime:
+     * 4/27/19 8:38 AM</pre>
+     *
+     * @param uid
+     * @param startCount
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> pageQuery(Integer uid, int startCount, int pageSize) {
+
+        String sql = "SELECT f.rid, date, uid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_favorite f JOIN tab_route r ON f.rid = r.rid WHERE f.uid=? LIMIT ?,?";
+        return jdbcTemplate.queryForList(sql,uid,startCount,pageSize);
     }
 }
