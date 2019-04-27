@@ -140,7 +140,7 @@ public class RouteServiceImpl implements RouteService {
           Date: 4/25/19 2:24 PM
         */
         int prePage = pageNum == 1 ? 1 : pageNum - 1;
-        int nextPage = pageNum == totalPage ? totalCount : pageNum + 1;
+        int nextPage = pageNum == totalPage ? totalPage : pageNum + 1;
 
 
         // 封装数据

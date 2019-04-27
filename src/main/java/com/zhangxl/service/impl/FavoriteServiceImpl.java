@@ -233,11 +233,27 @@ public class FavoriteServiceImpl implements FavoriteService {
             int startCount = (pageNum - 1) * pageSize;
 
             // 调用 Dao 层，获取分页数据
-            List<Map<String,Object>> pageData = favoriteDao.pageQuery(loginUser.getUid(),startCount,pageSize);
+            List<Map<String, Object>> pageData = favoriteDao.pageQuery(loginUser.getUid(), startCount, pageSize);
+
+
+            // 分页条的计算
+
+            // 调用 Dao 层，获取当前 user 的 favorite 的总记录条数
+            int totalCount = favoriteDao.queryTotalCount(loginUser.getUid());
+
+            // 根据 totalCount 计算出 totalPage
+            int totalPage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
+
+            // 计算 prePage 和 nextPage
+            int prePage = pageNum == 1 ? 1 : pageNum - 1;
+            int nextPage = pageNum == totalPage ? totalPage : pageNum + 1;
 
 
             // 封装数据
-            result.put("pageData",pageData);
+            result.put("pageData", pageData);
+            result.put("totalPage",totalPage);
+            result.put("prePage", prePage);
+            result.put("nextPage", nextPage);
         }
 
 

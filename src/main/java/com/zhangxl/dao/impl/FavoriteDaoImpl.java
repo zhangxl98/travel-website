@@ -87,6 +87,21 @@ public class FavoriteDaoImpl implements FavoriteDao {
     public List<Map<String, Object>> pageQuery(Integer uid, int startCount, int pageSize) {
 
         String sql = "SELECT f.rid, date, uid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_favorite f JOIN tab_route r ON f.rid = r.rid WHERE f.uid=? LIMIT ?,?";
-        return jdbcTemplate.queryForList(sql,uid,startCount,pageSize);
+        return jdbcTemplate.queryForList(sql, uid, startCount, pageSize);
+    }
+
+    /**
+     * 查询 uid 对应的 user 的 favorite 记录条数
+     * <pre>createTime:
+     * 4/27/19 10:06 AM</pre>
+     *
+     * @param uid
+     * @return
+     */
+    @Override
+    public int queryTotalCount(Integer uid) {
+
+        String sql = "SELECT count(*) FROM tab_favorite WHERE uid=?";
+        return jdbcTemplate.queryForObject(sql,Integer.class,uid);
     }
 }

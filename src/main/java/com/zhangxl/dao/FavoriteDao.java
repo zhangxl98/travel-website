@@ -51,4 +51,14 @@ public interface FavoriteDao {
      * @return
      */
     List<Map<String, Object>> pageQuery(Integer uid, int startCount, int pageSize);
+
+    /**
+     * 查询 uid 对应的 user 的 favorite 记录条数
+     * <pre>createTime:
+     * 4/27/19 10:05 AM</pre>
+     *
+     * @param uid
+     * @return
+     */
+    int queryTotalCount(Integer uid);
 }
