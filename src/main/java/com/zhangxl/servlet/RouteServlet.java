@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -116,13 +118,15 @@ public class RouteServlet extends BaseServlet {
         String strPageNum = req.getParameter("pageNum");
         String strPageSize = req.getParameter("pageSize");
 
-        String strRname = req.getParameter("rname");
-        String strStartPrice = req.getParameter("startPrice");
-        String strEndPrice = req.getParameter("endPrice");
+        // 封装数据到 Map
+        Map<String, String> paraMap = new HashMap<>(16);
+        paraMap.put("rname",req.getParameter("rname"));
+        paraMap.put("startPrice",req.getParameter("startPrice"));
+        paraMap.put("endPrice",req.getParameter("endPrice"));
 
 
         // 处理数据：调用 Service 层处理业务
-        String jsonPageData = routeService.favoriteRangePageQuery(strPageNum, strPageSize, strRname, strStartPrice, strEndPrice);
+        String jsonPageData = routeService.favoriteRangePageQuery(strPageNum, strPageSize, paraMap);
 
         // 响应数据
         try {

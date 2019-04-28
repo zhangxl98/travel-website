@@ -185,13 +185,11 @@ public class RouteServiceImpl implements RouteService {
      *
      * @param strPageNum
      * @param strPageSize
-     * @param strRname
-     * @param strStartPrice
-     * @param strEndPrice
+     * @param paraMap
      * @return
      */
     @Override
-    public String favoriteRangePageQuery(String strPageNum, String strPageSize, String strRname, String strStartPrice, String strEndPrice) {
+    public String favoriteRangePageQuery(String strPageNum, String strPageSize, Map<String, String> paraMap) {
 
         // 用于封装数据的 Map
         Map<String, Object> result = new HashMap<>(16);
@@ -219,12 +217,12 @@ public class RouteServiceImpl implements RouteService {
         int startCount = (pageNum - 1) * pageSize;
 
         // 调用 Dao 层，获取分页数据
-        List<Route> routeList = routeDao.pageQueryOrderByCount(startCount, pageSize, strRname, strStartPrice, strEndPrice);
+        List<Route> routeList = routeDao.pageQueryOrderByCount(startCount, pageSize, paraMap);
 
         // 分页条计算
 
         // 调用 Dao 层，获取总记录条数
-        int totalCount = routeDao.queryTotalCount(strRname, strStartPrice, strEndPrice);
+        int totalCount = routeDao.queryTotalCount(paraMap);
         // 计算出 totalPage
         int totalPage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
         // 计算 prePage 和 nextPage

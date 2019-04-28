@@ -217,13 +217,17 @@ public class RouteDaoImpl implements RouteDao {
      *
      * @param startCount
      * @param pageSize
-     * @param strRname
-     * @param strStartPrice
-     * @param strEndPrice
+     * @param paraMap
      * @return
      */
     @Override
-    public List<Route> pageQueryOrderByCount(int startCount, int pageSize, String strRname, String strStartPrice, String strEndPrice) {
+    public List<Route> pageQueryOrderByCount(int startCount, int pageSize, Map<String, String> paraMap) {
+
+        // 取出参数
+        String rname = paraMap.get("rname");
+        String startPrice = paraMap.get("startPrice");
+        String endPrice = paraMap.get("endPrice");
+
 
         // 动态拼接 SQL
         StringBuilder sql = new StringBuilder("SELECT rid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_route WHERE rflag='1' ");
@@ -232,17 +236,17 @@ public class RouteDaoImpl implements RouteDao {
         ArrayList<Object> paramList = new ArrayList<>();
 
         // 判空
-        if (StringUtils.isNotBlank(strRname)) {
+        if (StringUtils.isNotBlank(rname)) {
             sql.append(" AND rname like ? ");
-            paramList.add("%" + strRname.trim() + "%");
+            paramList.add("%" + rname.trim() + "%");
         }
-        if (StringUtils.isNotBlank(strStartPrice)) {
+        if (StringUtils.isNotBlank(startPrice)) {
             sql.append(" AND price >= ? ");
-            paramList.add(strStartPrice);
+            paramList.add(startPrice);
         }
-        if (StringUtils.isNotBlank(strEndPrice)) {
+        if (StringUtils.isNotBlank(endPrice)) {
             sql.append(" AND price <= ? ");
-            paramList.add(strEndPrice);
+            paramList.add(endPrice);
         }
 
 
@@ -258,13 +262,16 @@ public class RouteDaoImpl implements RouteDao {
      * <pre>createTime:
      * 4/27/19 12:44 PM</pre>
      *
-     * @param strRname
-     * @param strStartPrice
-     * @param strEndPrice
+     * @param paraMap
      * @return
      */
     @Override
-    public int queryTotalCount(String strRname, String strStartPrice, String strEndPrice) {
+    public int queryTotalCount(Map<String, String> paraMap) {
+
+        // 取出参数
+        String rname = paraMap.get("rname");
+        String startPrice = paraMap.get("startPrice");
+        String endPrice = paraMap.get("endPrice");
 
         // 动态拼接 SQL
         StringBuilder sql = new StringBuilder("SELECT count(*) FROM tab_route WHERE rflag='1' ");
@@ -273,17 +280,17 @@ public class RouteDaoImpl implements RouteDao {
         ArrayList<Object> paramList = new ArrayList<>();
 
         // 判空
-        if (StringUtils.isNotBlank(strRname)) {
+        if (StringUtils.isNotBlank(rname)) {
             sql.append(" AND rname like ? ");
-            paramList.add("%" + strRname.trim() + "%");
+            paramList.add("%" + rname.trim() + "%");
         }
-        if (StringUtils.isNotBlank(strStartPrice)) {
+        if (StringUtils.isNotBlank(startPrice)) {
             sql.append(" AND price >= ? ");
-            paramList.add(strStartPrice);
+            paramList.add(startPrice);
         }
-        if (StringUtils.isNotBlank(strEndPrice)) {
+        if (StringUtils.isNotBlank(endPrice)) {
             sql.append(" AND price <= ? ");
-            paramList.add(strEndPrice);
+            paramList.add(endPrice);
         }
 
 

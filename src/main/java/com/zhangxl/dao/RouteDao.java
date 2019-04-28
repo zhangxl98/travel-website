@@ -108,22 +108,18 @@ public interface RouteDao {
      *
      * @param startCount
      * @param pageSize
-     * @param strRname
-     * @param strStartPrice
-     * @param strEndPrice
+     * @param paraMap
      * @return
      */
-    List<Route> pageQueryOrderByCount(int startCount, int pageSize, String strRname, String strStartPrice, String strEndPrice);
+    List<Route> pageQueryOrderByCount(int startCount, int pageSize, Map<String, String> paraMap);
 
     /**
      * 按条件查询符合的记录条数
      * <pre>createTime:
      * 4/27/19 12:44 PM</pre>
      *
-     * @param strRname
-     * @param strStartPrice
-     * @param strEndPrice
+     * @param paraMap
      * @return
      */
-    int queryTotalCount(String strRname, String strStartPrice, String strEndPrice);
+    int queryTotalCount(Map<String, String> paraMap);
 }

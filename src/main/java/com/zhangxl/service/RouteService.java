@@ -1,5 +1,7 @@
 package com.zhangxl.service;
 
+import java.util.Map;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -53,10 +55,8 @@ public interface RouteService {
      *
      * @param strPageNum
      * @param strPageSize
-     * @param strRname
-     * @param strStartPrice
-     * @param strEndPrice
+     * @param paraMap
      * @return
      */
-    String favoriteRangePageQuery(String strPageNum, String strPageSize, String strRname, String strStartPrice, String strEndPrice);
+    String favoriteRangePageQuery(String strPageNum, String strPageSize, Map<String, String> paraMap);
 }
