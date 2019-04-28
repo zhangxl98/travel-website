@@ -152,7 +152,7 @@ public class RouteDaoImpl implements RouteDao {
             // 动态拼接
             sql.append(" AND rname LIKE ? ");
             // 加入参数 -- 模糊匹配
-            paramList.add("%" + rname + "%");
+            paramList.add("%" + rname.trim() + "%");
         }
 
         try {
@@ -217,13 +217,40 @@ public class RouteDaoImpl implements RouteDao {
      *
      * @param startCount
      * @param pageSize
+     * @param strRname
+     * @param strStartPrice
+     * @param strEndPrice
      * @return
      */
     @Override
-    public List<Route> pageQueryOrderByCount(int startCount, int pageSize) {
+    public List<Route> pageQueryOrderByCount(int startCount, int pageSize, String strRname, String strStartPrice, String strEndPrice) {
 
-        String sql = "SELECT rid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_route WHERE rflag='1' ORDER BY count DESC LIMIT ?,?";
-        return jdbcTemplate.query(sql,new BeanPropertyRowMapper<Route>(Route.class),startCount,pageSize);
+        // 动态拼接 SQL
+        StringBuilder sql = new StringBuilder("SELECT rid, rname, price, routeIntroduce, rflag, rdate, isThemeTour, count, cid, rimage, sid, sourceId FROM tab_route WHERE rflag='1' ");
+
+        // 定义参数集合
+        ArrayList<Object> paramList = new ArrayList<>();
+
+        // 判空
+        if (StringUtils.isNotBlank(strRname)) {
+            sql.append(" AND rname like ? ");
+            paramList.add("%" + strRname.trim() + "%");
+        }
+        if (StringUtils.isNotBlank(strStartPrice)) {
+            sql.append(" AND price >= ? ");
+            paramList.add(strStartPrice);
+        }
+        if (StringUtils.isNotBlank(strEndPrice)) {
+            sql.append(" AND price <= ? ");
+            paramList.add(strEndPrice);
+        }
+
+
+        sql.append(" ORDER BY count DESC LIMIT ?,? ");
+        paramList.add(startCount);
+        paramList.add(pageSize);
+
+        return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<Route>(Route.class), paramList.toArray());
     }
 
     /**
@@ -231,14 +258,39 @@ public class RouteDaoImpl implements RouteDao {
      * <pre>createTime:
      * 4/27/19 12:44 PM</pre>
      *
+     * @param strRname
+     * @param strStartPrice
+     * @param strEndPrice
      * @return
      */
     @Override
-    public int queryTotalCount() {
+    public int queryTotalCount(String strRname, String strStartPrice, String strEndPrice) {
 
-        String sql = "SELECT count(*) FROM tab_route WHERE rflag='1' ORDER BY count DESC";
+        // 动态拼接 SQL
+        StringBuilder sql = new StringBuilder("SELECT count(*) FROM tab_route WHERE rflag='1' ");
+
+        // 定义参数集合
+        ArrayList<Object> paramList = new ArrayList<>();
+
+        // 判空
+        if (StringUtils.isNotBlank(strRname)) {
+            sql.append(" AND rname like ? ");
+            paramList.add("%" + strRname.trim() + "%");
+        }
+        if (StringUtils.isNotBlank(strStartPrice)) {
+            sql.append(" AND price >= ? ");
+            paramList.add(strStartPrice);
+        }
+        if (StringUtils.isNotBlank(strEndPrice)) {
+            sql.append(" AND price <= ? ");
+            paramList.add(strEndPrice);
+        }
+
+
+        sql.append(" ORDER BY count DESC ");
+
         try {
-            return jdbcTemplate.queryForObject(sql,Integer.class);
+            return jdbcTemplate.queryForObject(sql.toString(), Integer.class, paramList.toArray());
         } catch (Exception e) {
             return 0;
         }

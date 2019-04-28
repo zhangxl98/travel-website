@@ -16,10 +16,10 @@
 <div class="contant">
 	<div class="shaixuan">
 		<span>线路名称</span>
-		<input type="text">
+		<input type="text" id="searchName">
 		<span>金额</span>
-		<input type="text">~<input type="text">
-		<button>搜索</button>
+		<input type="text" id="startPrice">~<input type="text" id="endPrice">
+		<button onclick="getPageData(1, 8)">搜索</button>
 	</div>
 	<div class="list clearfix">
 		<ul id="favoriteRangeList">
@@ -28,7 +28,7 @@
 	</div>
 	<div class="pageNum">
 		<ul id="pageLine">
-      <!-- 动态显示分页 -->
+			<!-- 动态显示分页 -->
 		</ul>
 	</div>
 </div>
@@ -45,8 +45,21 @@
 	})
 
 	function getPageData(pageNum, pageSize) {
+
+		// 获取表单数据
+		var rname = $("#searchName").val()
+		var startPrice = $("#startPrice").val()
+		var endPrice = $("#endPrice").val()
+
+
 		// 发送异步请求，加载分页数据
-		$.get("/route.do?op=favoriteRangePageQuery", {pageNum: pageNum, pageSize: pageSize}, function (result) {
+		$.get("/route.do?op=favoriteRangePageQuery", {
+			pageNum: pageNum,
+			pageSize: pageSize,
+			rname: rname,
+			startPrice: startPrice,
+			endPrice: endPrice
+		}, function (result) {
 
 			// 获取后端响应的数据 -- 线路
 			var routeList = result.routeList

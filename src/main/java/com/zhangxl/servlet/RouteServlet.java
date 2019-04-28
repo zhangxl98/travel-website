@@ -116,8 +116,13 @@ public class RouteServlet extends BaseServlet {
         String strPageNum = req.getParameter("pageNum");
         String strPageSize = req.getParameter("pageSize");
 
+        String strRname = req.getParameter("rname");
+        String strStartPrice = req.getParameter("startPrice");
+        String strEndPrice = req.getParameter("endPrice");
+
+
         // 处理数据：调用 Service 层处理业务
-        String jsonPageData = routeService.favoriteRangePageQuery(strPageNum,strPageSize);
+        String jsonPageData = routeService.favoriteRangePageQuery(strPageNum, strPageSize, strRname, strStartPrice, strEndPrice);
 
         // 响应数据
         try {

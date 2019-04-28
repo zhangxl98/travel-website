@@ -53,7 +53,10 @@ public interface RouteService {
      *
      * @param strPageNum
      * @param strPageSize
+     * @param strRname
+     * @param strStartPrice
+     * @param strEndPrice
      * @return
      */
-    String favoriteRangePageQuery(String strPageNum, String strPageSize);
+    String favoriteRangePageQuery(String strPageNum, String strPageSize, String strRname, String strStartPrice, String strEndPrice);
 }
